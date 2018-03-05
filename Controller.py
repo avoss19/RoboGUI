@@ -159,13 +159,20 @@ def updateFTP(data):
 
 controllerScheme = 0
 
-f = open('ftpTemp','r+')
-while True:
-    controllerInput()
-    drive = driveMotors()
-    updateFTP(drive)
-    os.system('clear')
-    print "#"*60
-    print "##", " "*20, "Motor Values", " " *20, "##"
-    print "#"*60
-    print "motorL: ", drive[0], "motorR: ", drive[1]
+f = open('ftpTemp','wr+')
+try:
+    while True:
+        controllerInput()
+        drive = driveMotors()
+        updateFTP(drive)
+        os.system('clear')
+        #print "#"*60
+        #print "##", " "*20, "Motor Values", " " *20, "##"
+        #print "#"*60
+        #print "motorL: ", drive[0], "motorR: ", drive[1]
+        print "Controller Support started"
+
+except:
+    print "#" * 60
+    print "Error: Controller not connected"
+    print "#" * 60
