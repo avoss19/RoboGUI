@@ -17,5 +17,5 @@ $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui
 ```
 
 # Windows
-- qt4
+- qt4 <br />
 https://www.17od.com/2005/07/05/installing-qt-40-on-windows/
