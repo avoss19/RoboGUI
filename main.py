@@ -5,17 +5,19 @@ Designed for BSM Robots
 
 Created By Andrew Voss
 
-Compatibility: Mac OS X
+Compatibility: Unix Systems (mac & linux) & windows
+
+Not tested on windows
 
 Notes:
-- Make windows & Linux compatible (not issue due to everyone at BSM having macs)
-- switch QDialog to QMainWindow (line 23)
+- Make windows compatible (not issue due to everyone at BSM using unix based machines)
+- switch QDialog to QMainWindow (line 25)
     - Fix size of widgets use setGeometry/geometry or rezise
 - Camera stream https://gist.github.com/cms-/1cd8ff5083884a4355bd65f084eda927
 '''
 
+import sys, os, time
 import ip
-import sys, os, subprocess, time
 from PyQt4.QtCore import SIGNAL, QThread, pyqtSlot, QSize
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
@@ -52,7 +54,6 @@ class Form(QDialog):
 
     def printIP(self):
         ipAddresses = "<b>Connected IP Addresses:</b>"
-        numIP = 0
         nextLine = "<br />"
 
         # get ip address from ip.py
@@ -106,10 +107,18 @@ class Form(QDialog):
     def quit(self):
         # quits all running python programs (not best method to kill program)
         # tested on two different macs and for some reason one python task is capitalized while the other isn't
-        os.system("clear")
-        os.system("killall -9 python")
-        os.system("clear")
-        os.system("killall -9 Python")
+        try:
+            os.system("killall -9 python")
+            os.system("killall -9 Python")
+        except:
+            print "not on unix system"
+
+
+        # not tested on windows
+        try:
+            os.system("taskkill /F /IM python.exe /T")
+        except:
+            print "unknown system"
 
 app = QApplication(sys.argv)
 form = Form()
