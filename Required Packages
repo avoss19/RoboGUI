@@ -3,6 +3,3 @@
 
 - qt4
 brew install qt@4
-
-- Pyobjct
-pip install Pyobjct
