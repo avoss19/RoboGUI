@@ -15,7 +15,7 @@ Compatibility: Unix Systems (mac & linux) & windows
 Not tested on windows
 
 Notes:
-- Make windows compatible (not issue due to everyone at BSM using unix based machines)
+- Tasks https://goo.gl/57n8XC & https://github.com/avoss19/RoboGUI
 - switch QDialog to QMainWindow (line 30)
     - Fix size of widgets use setGeometry/geometry or rezise
 - Camera stream https://gist.github.com/cms-/1cd8ff5083884a4355bd65f084eda927
@@ -170,17 +170,18 @@ class Form(QWidget):
     def quit(self):
         # quits all running python programs (not best method to kill program)
         # tested on two different macs and for some reason one python task is capitalized while the other isn't
-        try:
+        from sys import platform
+
+        if platform == "linux" or platform == "linux2":
             os.system("killall -9 python")
             os.system("killall -9 Python")
-        except:
-            print "not on unix system"
 
-        # not tested on windows
-        try:
+        elif platform == "darwin":
+            os.system("killall -9 python")
+            os.system("killall -9 Python")
+
+        elif platform == "win32":
             os.system("taskkill /F /IM python.exe /T")
-        except:
-            print "unknown system"
 
 
 def windowMode():
