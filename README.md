@@ -10,5 +10,5 @@ GUI written in python w/ PyQt4 for BSM Robots
 - [ ] Have client program start on bootup
 
 ## Required Packages
-- PyQt4 <br />
+- PyQt4, PyGame <br />
 [Install For Required Packages](Required%20Packages.md/)
