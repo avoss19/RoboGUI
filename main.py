@@ -33,6 +33,8 @@ class Form(QWidget):
 
         self.initScreenSize() # If window mode set to fullscreen window
 
+        self.setMinimumSize(800, 600)
+
         # window size and position
         self.resize(self.x,self.y) # setFixedSize disables window resizing
         self.move(0,0)
@@ -60,7 +62,6 @@ class Form(QWidget):
 
     def updateDisplay(self):
         self.pyQtResolution()
-        #self.debugB.move(0,self.y-30)
 
         self.debugB.move(0,self.y-30)
         self.ip.move(self.x - 200,5)
