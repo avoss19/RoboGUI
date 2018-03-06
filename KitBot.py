@@ -1,4 +1,5 @@
 import sys
+import kitBotMain as main
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QDialog, QApplication, QPushButton, QLineEdit, QFormLayout
 
@@ -22,13 +23,25 @@ class Form(QDialog):
         self.connect(self.pb, SIGNAL("clicked()"),self.button_click)
         self.setWindowTitle("RoboGUI")
 
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtGui.QApplication.desktop().screenNumber(QtGui.QApplication.desktop().cursor().pos())
+        centerPoint = QtGui.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
+
     def button_click(self):
         # shost is a QString object
+        global shost
         shost = self.le.text()
-        print shost
+
+        #app.closeAllWindows()
+
+        main.main(shost)
 
 
-app = QApplication(sys.argv)
-form = Form()
-form.show()
-app.exec_()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    form = Form()
+    form.show()
+    sys.exit(app.exec_())

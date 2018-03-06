@@ -22,7 +22,6 @@ Notes:
 '''
 
 import sys, os, time
-import ip
 from PyQt4.QtCore import SIGNAL, QThread, pyqtSlot, QSize, QTimer
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
@@ -36,7 +35,7 @@ class Form(QWidget):
         # window size and position
         self.resize(800, 600) # set screen size
         self.setMinimumSize(800, 600) # set min screen size
-        self.move(0,0)
+        self.center()
 
         self.pyQtResolution() # Get window resolution
 
@@ -57,6 +56,13 @@ class Form(QWidget):
         self.debugButton()
 
         #self.updateDisplayB()
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
+        centerPoint = QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
 
 
     def updateDisplay(self):
@@ -108,9 +114,7 @@ class Form(QWidget):
         nextLine = "<br />"
 
         # get ip address from ip.py
-        for i in ip.ips:
-            if i[:1] != "_":
-                exec("ipAddresses = ipAddresses + nextLine + i + ' = ' + ip." + str(i))
+        ipAddresses = ipAddresses + nextLine + "kitBot" + ' = ' + ip
 
         # change color of ip address text
         ipAddresses = "<font color ='green'>" + ipAddresses + "</font>"
@@ -192,8 +196,9 @@ def windowMode():
     except:
         form.show()
 
-def main():
-    global app, form
+def main(ipAddresses):
+    global app, form, ip
+    ip = ipAddresses
     os.system("clear")
     app = QApplication(sys.argv)
     form = Form()
@@ -206,6 +211,3 @@ def main():
     timer.start(1)
 
     app.exec_()
-
-if __name__ == '__main__':
-    main()
