@@ -18,4 +18,4 @@ $ python connectKitBot.py
 
 ## Dependencies
 - Qt4, PyGame, vlc  <br />
-[Dependencies install](/.github/Dependencies.md/)
+[Dependencies install](/docs/Dependencies.md/)
