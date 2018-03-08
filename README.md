@@ -2,7 +2,10 @@
 GUI written in python w/ PyQt4 for BSM Robots
 
 ## How to run
-- Run KitBot.py
+- Run connectKitBot.py
+```
+$ python connectKitBot.py
+```
 
 ## Tasks
 
