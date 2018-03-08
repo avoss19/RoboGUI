@@ -175,4 +175,4 @@ def main(ipAddresses):
     app = QApplication(sys.argv)
     form = Form()
     windowMode() # show window
-    app.exec_()
+    #app.exec_() # This line is needed to use this program w/out connectKitBot.py
