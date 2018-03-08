@@ -22,18 +22,18 @@ import sys, os, time
 import camera
 from PyQt4.QtCore import SIGNAL, QThread, pyqtSlot, QSize, QTimer, QUrl
 from PyQt4.QtGui import *
-from PyQt4.QtWebKit import *
-from PyQt4.QtMultimedia import *
+
 
 class Form(QWidget):
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
 
-        self.initScreenSize() # If window mode set to fullscreen window
+        #self.initScreenSize() # If window mode set to fullscreen window
 
         # window size and position
-        self.resize(1000, 600) # set screen size
-        self.setMinimumSize(800, 600) # set min screen size
+        #self.resize(1000, 600) # set screen size
+        #self.setMinimumSize(800, 600) # set min screen size
+        self.setFixedSize(1000, 600) # set fixed screen size; no resizing window
         self.center()
 
         self.pyQtResolution() # Get window resolution
@@ -51,32 +51,18 @@ class Form(QWidget):
         self.printIP()
         self.controllerButton()
         self.quitButton()
-        self.debugButton()
+
+        self.debugButton() # For testing purposes
 
 
-    def center(self):
-        frameGm = self.frameGeometry()
-        screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
-        centerPoint = QApplication.desktop().screenGeometry(screen).center()
-        frameGm.moveCenter(centerPoint)
-        self.move(frameGm.topLeft())
-
-
-    def videoStream(self):
-
-        self.layout = QGridLayout(self)
-
-        view = camera.camera(ip)
-
-        # set size of camera stream
-        view.setMaximumHeight(500)
-        view.setMaximumWidth(500)
-
-        # Add widget to display
-        self.layout.addWidget(view)
+    def initScreenSize(self):
+        # For fullscreen app
+        screen_resolution = app.desktop().screenGeometry()
+        self.x, self.y = screen_resolution.width(), screen_resolution.height()
 
 
     def debug(self):
+        # For printing info to console
         #print sys.argv
         print "PyQt4 Resolution: ", self.x, " x ", self.y
         print self.size()
@@ -94,18 +80,37 @@ class Form(QWidget):
         self.connect(self.debugB, SIGNAL("clicked()"),self.debug)
 
 
-    def initScreenSize(self):
-        screen_resolution = app.desktop().screenGeometry()
-        self.x, self.y = screen_resolution.width(), screen_resolution.height()
-
-
     def pyQtResolution(self):
+        # Get resolution of window
         rec = self.geometry()
         self.x = rec.width()
         self.y = rec.height()
 
 
+    def center(self):
+        # Center window on display
+        frameGm = self.frameGeometry()
+        screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
+        centerPoint = QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
+
+
+    def videoStream(self):
+        # Video Feed
+        self.layout = QGridLayout(self)
+        view = camera.camera(ip)
+
+        # set size of camera stream
+        view.setMaximumHeight(500)
+        view.setMaximumWidth(500)
+
+        # Add widget to display
+        self.layout.addWidget(view)
+
+
     def printIP(self):
+        # Print connected ip addresses to screen
         ipAddresses = "<b>Connected IP Address:</b>"
         nextLine = "<br />"
 
@@ -123,6 +128,11 @@ class Form(QWidget):
         self.ip.move(self.x - 200,0)
 
 
+    def controllerStart(self):
+        # not best method to start python program, but threading doesn't play well with pyqt4
+        os.system("python Controller.py &")
+
+
     def controllerButton(self):
         self.controller = QPushButton("Run Controller-Support", self)
         self.controller.move(0,5)
@@ -130,9 +140,23 @@ class Form(QWidget):
         self.controller.resize(180,30)
 
 
-    def controllerStart(self):
-        # not best method to start python program, but threading doesn't play well with pyqt4
-        os.system("python Controller.py &")
+    def quit(self):
+        # quits all running python programs (not best method to kill program), but will kill controller-support
+        # Only tested on mac osx; but should technically work
+        from sys import platform
+
+        if platform == "linux" or platform == "linux2":
+            os.system("killall -9 python")
+            os.system("killall -9 Python")
+
+        # tested on two different macs and for some reason one python task is capitalized while the other isn't
+        # not sure if it is an isolated situation
+        elif platform == "darwin":
+            os.system("killall -9 python")
+            os.system("killall -9 Python")
+
+        elif platform == "win32":
+            os.system("taskkill /F /IM python.exe /T")
 
 
     def quitButton(self):
@@ -141,22 +165,6 @@ class Form(QWidget):
         self.q.move(0,30)
         self.connect(self.q, SIGNAL("clicked()"),self.quit)
 
-
-    def quit(self):
-        # quits all running python programs (not best method to kill program)
-        # tested on two different macs and for some reason one python task is capitalized while the other isn't
-        from sys import platform
-
-        if platform == "linux" or platform == "linux2":
-            os.system("killall -9 python")
-            os.system("killall -9 Python")
-
-        elif platform == "darwin":
-            os.system("killall -9 python")
-            os.system("killall -9 Python")
-
-        elif platform == "win32":
-            os.system("taskkill /F /IM python.exe /T")
 
 def windowMode():
     try:
