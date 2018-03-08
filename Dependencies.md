@@ -41,3 +41,4 @@ https://www.17od.com/2005/07/05/installing-qt-40-on-windows/
 ```
 python.exe -m pip install pygame
 ```
+
