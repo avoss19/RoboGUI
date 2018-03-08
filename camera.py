@@ -114,7 +114,7 @@ class Player(QtGui.QMainWindow):
         """
         if filename is None:
             #filename = QtGui.QFileDialog.getOpenFileName(self, "Open File", os.path.expanduser('~'))
-            filename  = "http://192.168.21.108:8080?action=stream"
+            filename  = "http://" + ip + ":8080?action=stream"
         if not filename:
             return
 
@@ -171,6 +171,13 @@ class Player(QtGui.QMainWindow):
                 # "Pause", not the desired behavior of a media player
                 # this will fix it
                 self.Stop()
+
+def camera(ipAddresses):
+    global ip
+    ip = str(ipAddresses)
+    view = Player()
+
+    return view
 
 def main():
     app = QtGui.QApplication(sys.argv)
