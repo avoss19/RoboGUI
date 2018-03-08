@@ -16,6 +16,6 @@ $ python connectKitBot.py
 - [ ] Have client program start on bootup
 - [ ] Clean up code & files
 
-## Required Packages
+## Dependencies
 - Qt4, PyGame, vlc  <br />
-[Install For Required Packages](Required%20Packages.md/)
+[Dependencies install](Dependencies.md/)
