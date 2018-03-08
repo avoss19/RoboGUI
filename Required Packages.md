@@ -17,6 +17,9 @@ or
 $ python -m pip install pygame
 ```
 
+- VLC-qt
+
+
 # Debian & Ubuntu Distros
 - qt4
 ```
