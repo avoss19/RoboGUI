@@ -22,9 +22,13 @@ Notes:
 '''
 
 import sys, os, time
-from PyQt4.QtCore import SIGNAL, QThread, pyqtSlot, QSize, QTimer
+import ip
+import camera
+from PyQt4.QtCore import SIGNAL, QThread, pyqtSlot, QSize, QTimer, QUrl
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
+#from PyQt4.QtMultimediaWidgets import *
+from PyQt4.QtMultimedia import *
 
 class Form(QWidget):
     def __init__(self, parent=None):
@@ -33,7 +37,7 @@ class Form(QWidget):
         self.initScreenSize() # If window mode set to fullscreen window
 
         # window size and position
-        self.resize(800, 600) # set screen size
+        self.resize(1000, 1000) # set screen size
         self.setMinimumSize(800, 600) # set min screen size
         self.center()
 
@@ -47,13 +51,17 @@ class Form(QWidget):
         # window title
         self.setWindowTitle("RoboGUI")
 
+        self.videoStream()
+
         self.printIP()
-        self.pic0()
+        #self.pic0()
         self.controllerButton()
-        self.changePic()
+        #self.changePic()
         self.quitButton()
 
         self.debugButton()
+
+
 
         #self.updateDisplayB()
 
@@ -73,6 +81,25 @@ class Form(QWidget):
 
         self.update()
 
+    def videoStream(self):
+
+        self.layout = QGridLayout(self)
+        #self.layout.resize(100,100)
+        #self.layout.setRowStretch(0, 3)
+
+        view = camera.Player()
+        #view.resize(100,100)
+
+        #view = Browser()
+        #view.load(QUrl('http://google.com'))
+        view.setMaximumHeight(500)
+        view.setMaximumWidth(500)
+
+        self.layout.addWidget(view)
+        #self.layout.setMaximum(100,100)
+
+        #self.view.move(0,0)
+        #self.view.resize(200,200)
 
     def updateDisplayB(self):
         self.displayB = QPushButton("Update Display", self)
@@ -120,25 +147,39 @@ class Form(QWidget):
         ipAddresses = "<font color ='green'>" + ipAddresses + "</font>"
 
         # Create text on screen to display ip addresses
-        self.ip = QLabel(ipAddresses, self)
+        self.layout.ip = QLabel(ipAddresses, self)
 
         # position of ip address text
-        self.ip.move(self.x - 200,5)
+
+        self.layout.ip.resize(300,40)
+        self.layout.ip.move(self.x - 200,0)
+
+        #self.ip.resize(1000,1000)
 
 
     def pic0(self):
         self.picName = QLabel("<b>Camera1</b>", self)
         self.picName.move(5, 85)
 
-        self.pic = QLabel(self)
-        self.pic.setPixmap(QPixmap("pepe0.jpg"))
+        #self.pic = QLabel(self)
+        #self.pic.setPixmap(QPixmap("pepe0.jpg"))
 
         # http image
-        #self.pic = QWebView(self)
-        #self.pic.setHtml("<img src='http://" + ip.camera1 + ":8080?action=stream" + "' />") # robot video
+        self.pic = Browser()
+        self.pic.load(QUrl('http://www.google.com'))
+
+        #self.pic.setHtml("<img src='http://" + ips.camera1 + "8080/?action=stream") # robot video
         #self.pic.setHtml("<img src='http://localhost/pepe0.jpg' />") # test image
 
         self.pic.move(5,100)
+
+        i = vlc.Instance('--verbose 2'.split())
+        p = i.media_player_new()
+        p.set_mrl('rtp://@224.1.1.1')
+        p.play()
+
+        self.camera = QMediaPlayer()
+        self.cemera.QMediaContent(QUrl("http://192.168.42.129:8080/video"));
 
 
     def pic1(self):
@@ -150,6 +191,7 @@ class Form(QWidget):
         self.controller = QPushButton("Run Controller-Support", self)
         self.controller.move(0,5)
         self.connect(self.controller, SIGNAL("clicked()"),self.controllerStart)
+        self.controller.resize(300,30)
 
 
     def controllerStart(self):
@@ -187,6 +229,17 @@ class Form(QWidget):
             os.system("taskkill /F /IM python.exe /T")
 
 
+class Browser(QWebView):
+
+    def __init__(self):
+        QWebView.__init__(self)
+        self.loadFinished.connect(self._result_available)
+
+    def _result_available(self, ok):
+        frame = self.page().mainFrame()
+        print unicode(frame.toHtml()).encode('utf-8')
+
+
 def windowMode():
     try:
         if sys.argv[1] == "fullscreen":
@@ -202,12 +255,17 @@ def main(ipAddresses):
     os.system("clear")
     app = QApplication(sys.argv)
     form = Form()
+
+
+    #self.move(0,100)
+
     windowMode()
+
     #form.updateDisplay() # Fixes issues with misplaced widgets in windowed mode
 
     # Update display every second; Poor implementation
-    timer = QTimer(form)
-    timer.timeout.connect(form.updateDisplay)
-    timer.start(1)
+    #timer = QTimer(form)
+    #timer.timeout.connect(form.updateDisplay)
+    #timer.start(1)
 
     app.exec_()
