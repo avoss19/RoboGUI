@@ -1,11 +1,16 @@
 import sys
 import kitBotMain as main
 from PyQt4.QtCore import SIGNAL
-from PyQt4.QtGui import QDialog, QApplication, QPushButton, QLineEdit, QFormLayout
+from PyQt4.QtGui import QDialog, QApplication, QPushButton, QLineEdit, QFormLayout, QIcon
 
 class Form(QDialog):
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
+
+        # Program icon
+        app_icon = QIcon()
+        app_icon.addFile('bsm.png')
+        app.setWindowIcon(app_icon)
 
         self.le = QLineEdit()
         self.le.setObjectName("host")
