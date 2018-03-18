@@ -1,6 +1,10 @@
 # RoboGUI
 GUI written in python w/ PyQt4 for BSM Robots
 
+![alt text](https://raw.githubusercontent.com/avoss19/RoboGUI/master/docs/connect.png)
+
+![alt text](https://raw.githubusercontent.com/avoss19/RoboGUI/master/docs/main.png)
+
 ## How to run
 - Run connectKitBot.py
 ```
